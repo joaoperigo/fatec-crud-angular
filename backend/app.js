@@ -3,15 +3,21 @@ const app = express();
 
 const bodyParser = require ('body-parser');
 app.use (bodyParser.json());
+const Livro = require ('./models/livro');
+const mongoose = require ('mongoose');
 
 /*app.use ((req, res, next) => {
   console.log ("Chegou uma requisição...");
   next();
 });*/
 
+mongoose.connect('mongodb+srv://fatec-ipi:bossini@cluster0.6a1ur.mongodb.net/fatec-ipi-db?retryWrites=true&w=majority')
+.then(() => console.log ("Conexão OK"))
+.catch((e) => console.log ("Conexão falhou: " + e));
+
 const livros = [
   {
-    id: '1',
+    id: '2',
     titulo: 'MIMINI',
     autor: 'Milton',
     numero: '12341234'
@@ -33,22 +39,52 @@ app.use ((req, res, next) => {
 });
 
 app.post('/api/livros', (req, res, next) => {
-  const livro = req.body;
+  /*const livro = req.body;
   livros.push(livro);
-  console.log (livro);
-  res.status(201).json({
-    mensagem: 'Livro Inserido'
+  console.log (livro);*/
+  const livro = new Livro ({
+    titulo: req.body.titulo,
+    autor: req.body.autor,
+    numero: req.body.numero
   });
+  livro.save()
+  .then((document) => {
+    console.log(`Inserção ok: ${document}`);
+    res.status(201).json({
+      mensagem: 'Livro Inserido'
+    });
+  })
+  .catch((error) => {
+    console.log (`Inserção NOK: ${error}`);
+    res.status(404).json({
+      mensagem: 'Livro não foi inserido, tente novamente mais tarde'
+    })
+  })
 });
 
 
 
-app.use ('/api/livros', (req, res, next) =>{
-  //res.send ("Hello From the Back End monitorado");
+app.get ('/api/livros', (req, res, next) =>{
+  Livro.find()
+  .then(documents => {
+    res.status(200).json({
+      mensagem: 'Tudo ok',
+      livros: documents
+    })
+  })
+  .catch ((error) => {
+    console.log ('Busca falhou: ' + error)
+    res.status(404).json({
+      mensagem: 'Falhou',
+      livros: []
+    })
+  })
+
+  /*//res.send ("Hello From the Back End monitorado");
   res.status(200).json({
     mensagem: "Tudo ok",
     livros: livros
-  });
+  });*/
 })
 
 

@@ -21,9 +21,11 @@ getLivros(): void{
   //return [...this.livros];
   }
 
- adicionarLivro ( id: number, titulo: string, autor: string, numero: string): void {
+//  adicionarLivro ( id: number, titulo: string, autor: string, numero: string): void {
+
+ adicionarLivro ( titulo: string, autor: string, numero: string ): void {
   const livro: Livro = {
-    id: id,
+    // id: id,
     titulo: titulo,
     autor: autor,
     numero: numero

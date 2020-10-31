@@ -15,6 +15,8 @@ import { LivroInserirComponent } from './livros/livro-inserir/livro-inserir.comp
 import { CabecalhoComponent } from './cabecalho/cabecalho.component';
 import { LivroListaComponent } from './livros/livro-lista/livro-lista.component';
 
+import { LivroService } from './livros/livro.service';
+
 @NgModule({
   declarations: [
     AppComponent,

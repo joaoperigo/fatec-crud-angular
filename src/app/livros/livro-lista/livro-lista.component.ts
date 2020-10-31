@@ -1,30 +1,33 @@
-import { Component, Input, OnInit } from '@angular/core';
+
+import { Component, OnInit, OnDestroy} from '@angular/core';
 import { Livro } from '../livro.model';
+import { LivroService } from '../livro.service';
+
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-livro-lista',
   templateUrl: './livro-lista.component.html',
   styleUrls: ['./livro-lista.component.css']
 })
-export class LivroListaComponent implements OnInit {
-  // livros = [
-  //   {
-  //   titulo: 'José',
-  //   autor: '11223344',
-  //   numero: 'jose@numero.com',
-  //   },
-  //   {
-  //   titulo: 'Maria',
-  //   autor: '22334455',
-  //   numero: 'maria@numero.com',
-  //   },
-  // ];
+export class LivroListaComponent implements OnInit, OnDestroy {
 
-  @Input() livros: Livro[] = [];
+  livros: Livro[] = [];
 
-  constructor() { }
+  private livroSubscription: Subscription;
+
+  constructor(public livroService: LivroService) { }
 
   ngOnInit(): void {
+    this.livros = this.livroService.getLivros();
+      this.livroSubscription = this.livroService.getListaLivrosAtualizada()
+    .subscribe( (livros: Livro[]) => {
+      this.livros = livros;
+    });
+  }
+
+  ngOnDestroy (): void {
+    this.livroSubscription.unsubscribe();
   }
 
 }

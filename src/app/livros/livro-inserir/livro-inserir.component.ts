@@ -25,8 +25,11 @@ export class LivroInserirComponent {
     if(form.invalid) {
       return;
     }
+    else {
+      this.incrementa= this.incrementa + 1;
+    }
 
-    this.incrementa= this.incrementa + 1;
+
 
     this.livroService.adicionarLivro(
       this.incrementa,

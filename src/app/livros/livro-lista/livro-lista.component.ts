@@ -1,4 +1,3 @@
-
 import { Component, OnInit, OnDestroy} from '@angular/core';
 import { Livro } from '../livro.model';
 import { LivroService } from '../livro.service';
@@ -24,6 +23,10 @@ export class LivroListaComponent implements OnInit, OnDestroy {
     .subscribe( (livros: Livro[]) => {
       this.livros = livros;
     });
+  }
+
+  onDelete (id: string): void{
+    this.livroService.removerLivro(id);
   }
 
   ngOnDestroy (): void {

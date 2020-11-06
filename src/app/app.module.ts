@@ -19,6 +19,8 @@ import { LivroListaComponent } from './livros/livro-lista/livro-lista.component'
 
 import { LivroService } from './livros/livro.service';
 
+import { AppRoutingModule } from './app-routing.module';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -35,7 +37,8 @@ import { LivroService } from './livros/livro.service';
     MatButtonModule,
     MatToolbarModule,
     MatExpansionModule,
-    HttpClientModule
+    HttpClientModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]

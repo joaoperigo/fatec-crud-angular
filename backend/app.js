@@ -48,10 +48,11 @@ app.post('/api/livros', (req, res, next) => {
     numero: req.body.numero
   });
   livro.save()
-  .then((document) => {
-    console.log(`Inserção ok: ${document}`);
+  .then((livroInserido) => {
+    console.log(`Inserção ok: ${livroInserido}`);
     res.status(201).json({
-      mensagem: 'Livro Inserido'
+      mensagem: 'Livro Inserido',
+      id: livroInserido._id
     });
   })
   .catch((error) => {
@@ -67,6 +68,7 @@ app.post('/api/livros', (req, res, next) => {
 app.get ('/api/livros', (req, res, next) =>{
   Livro.find()
   .then(documents => {
+    console.log(documents);
     res.status(200).json({
       mensagem: 'Tudo ok',
       livros: documents
@@ -87,6 +89,13 @@ app.get ('/api/livros', (req, res, next) =>{
   });*/
 })
 
-
+//DELETE /api/livros/5f91c274c2f25bff67d2f4da
+app.delete('/api/livros/:id', (req, res, next) => {
+  Livro.deleteOne({_id: req.params.id})
+  .then((resultado) => {
+    console.log(resultado);
+    res.status(200).json({mensagem: "Livro removido"});
+  })
+});
 
 module.exports = app;

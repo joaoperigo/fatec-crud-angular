@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Livro } from './livro.model';
 import { Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
+import { map, timestamp } from 'rxjs/operators';
 
 @Injectable ({ providedIn: 'root' })
 
@@ -12,6 +12,15 @@ export class LivroService {
 
  constructor (private httpClient: HttpClient){
 
+}
+
+getLivro (idLivro: string){
+  return this.httpClient.get<{_id: string, titulo: string, autor: string, numero: string}>(
+    `http://localhost:3000/api/livros/${idLivro}`
+  )
+  /*return {...this.livros.find(c => c.id === idLivro)};*/
+  /*let cli = this.livros.find((c) => c.id === idLivro);
+  return cli;*/
 }
 
 getLivros(): void{
@@ -34,6 +43,19 @@ getLivros(): void{
   }
 
 //  adicionarLivro ( id: number, titulo: string, autor: string, numero: string): void {
+
+
+  atualizarLivro (id: string, titulo: string, autor: string, numero: string){
+    const livro: Livro = {id, titulo, autor, numero};
+    this.httpClient.put(`http://localhost:3000/api/livros/${id}`, livro)
+    .subscribe(res => {
+      const copia = [...this.livros];
+      const indice = copia.findIndex (cli => cli.id === livro.id);
+      copia[indice] = livro;
+      this.livros = copia;
+      this.listaLivrosAtualizada.next([...this.livros]);
+    });
+  }
 
  adicionarLivro ( titulo: string, autor: string, numero: string ): void {
   const livro: Livro = {

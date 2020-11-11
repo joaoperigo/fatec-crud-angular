@@ -15,33 +15,18 @@ mongoose.connect('mongodb+srv://fatec-ipi:bossini@cluster0.6a1ur.mongodb.net/fat
 .then(() => console.log ("Conexão OK"))
 .catch((e) => console.log ("Conexão falhou: " + e));
 
-const livros = [
-  {
-    id: '2',
-    titulo: 'MIMINI',
-    autor: 'Milton',
-    numero: '12341234'
-  },
-  {
-    id: '2',
-    titulo: 'Cachorrinho',
-    autor: 'Catia',
-    numero: '12341234'
-  }
-]
+
 
 //CORS: Cross-Origin Resource Sharing
 app.use ((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader ('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-  res.setHeader ('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, OPTIONS');
+  res.setHeader ('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
   next();
 });
 
 app.post('/api/livros', (req, res, next) => {
-  /*const livro = req.body;
-  livros.push(livro);
-  console.log (livro);*/
+
   const livro = new Livro ({
     titulo: req.body.titulo,
     autor: req.body.autor,
@@ -82,11 +67,7 @@ app.get ('/api/livros', (req, res, next) =>{
     })
   })
 
-  /*//res.send ("Hello From the Back End monitorado");
-  res.status(200).json({
-    mensagem: "Tudo ok",
-    livros: livros
-  });*/
+
 })
 
 //DELETE /api/livros/5f91c274c2f25bff67d2f4da
@@ -97,5 +78,22 @@ app.delete('/api/livros/:id', (req, res, next) => {
     res.status(200).json({mensagem: "Livro removido"});
   })
 });
+
+app.put ('/api/livros/:idLivro', (req, res, next) => {
+  const livro = new Livro({
+    _id: req.params.idLivro,
+    titulo: req.body.titulo,
+    autor: req.body.autor,
+    numero: req.body.numero
+  });
+  Livro.updateOne(
+    { _id: req.params.idLivro},
+    livro
+  ).then(resultado => {
+    console.log("Atualizou: " + JSON.stringify(resultado))
+    res.status(200).json({mensagem: 'Atualização realizada com sucesso'})
+  })
+})
+
 
 module.exports = app;

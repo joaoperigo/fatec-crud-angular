@@ -1,22 +1,46 @@
 <mat-card>
-  <form (submit)="onSalvarLivro(livroForm)" #livroForm="ngForm">
-  <mat-form-field>
-  <input type="text" matInput placeholder="titulo" name="titulo" [ngModel]="livro?.titulo" required minlength="4" #titulo="ngModel" />
-  <mat-error *ngIf="titulo.invalid">Digite um titulo válido</mat-error>
-  </mat-form-field>
+  <mat-spinner *ngIf="estaCarregando"></mat-spinner>
+  <form [formGroup]="form" (submit)="onSalvarLivro()"  *ngIf="!estaCarregando">
 
+    <mat-form-field>
+      <input
+        type="text"
+        required
+        minlength="3"
+        matInput
+        placeholder="titulo"
+        formControlName="titulo"
+        name="titulo">
+      <mat-error *ngIf="form.get('titulo').invalid">Digite um titulo válido</mat-error>
+    </mat-form-field>
 
-  <mat-form-field>
-  <input type="text" matInput placeholder="autor" name="autor" [ngModel]="livro?.autor" required #autor="ngModel" />
-  <mat-error *ngIf="autor.invalid">Digite um autor válido</mat-error>
-  </mat-form-field>
+    <div>
+      <button mat-stroked-button type="button" (click)="selecionaArquivo.click()">Selecionar imagem</button>
+      <input type="file" #selecionaArquivo>
+    </div>
 
-  <mat-form-field>
-  <input type="text" matInput placeholder="número de páginas" name="numero" [ngModel]="livro?.numero" required #numero="ngModel" />
-  <mat-error *ngIf="numero.invalid">Digite um numero válido</mat-error>
-  </mat-form-field>
+    <mat-form-field>
+      <input
+        type="text"
+        required
+        matInput
+        placeholder="autor"
+        formControlName="autor"
+        name="autor">
+      <mat-error *ngIf="form.get('autor').invalid">Digite um teleautor válido</mat-error>
+    </mat-form-field>
 
+    <mat-form-field>
+      <input
+        type="text"
+        required
+        matInput
+        placeholder="numero"
+        formControlName="numero"
+        name="numero">
+        <mat-error *ngIf="form.get('numero').invalid">Digite um numero válido</mat-error>
+    </mat-form-field>
 
-  <button color="primary" mat-raised-button>Salvar Livro</button>
-</form>
+    <button mat-raised-button color="accent">Salvar Livro</button>
+  </form>
 </mat-card>

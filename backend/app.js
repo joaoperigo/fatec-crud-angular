@@ -3,8 +3,8 @@ const app = express();
 
 const bodyParser = require ('body-parser');
 app.use (bodyParser.json());
-const Livro = require ('./models/livro');
 const mongoose = require ('mongoose');
+const livroRoutes = require ('./rotas/livros');
 
 /*app.use ((req, res, next) => {
   console.log ("Chegou uma requisição...");
@@ -25,75 +25,6 @@ app.use ((req, res, next) => {
   next();
 });
 
-app.post('/api/livros', (req, res, next) => {
-
-  const livro = new Livro ({
-    titulo: req.body.titulo,
-    autor: req.body.autor,
-    numero: req.body.numero
-  });
-  livro.save()
-  .then((livroInserido) => {
-    console.log(`Inserção ok: ${livroInserido}`);
-    res.status(201).json({
-      mensagem: 'Livro Inserido',
-      id: livroInserido._id
-    });
-  })
-  .catch((error) => {
-    console.log (`Inserção NOK: ${error}`);
-    res.status(404).json({
-      mensagem: 'Livro não foi inserido, tente novamente mais tarde'
-    })
-  })
-});
-
-
-
-app.get ('/api/livros', (req, res, next) =>{
-  Livro.find()
-  .then(documents => {
-    console.log(documents);
-    res.status(200).json({
-      mensagem: 'Tudo ok',
-      livros: documents
-    })
-  })
-  .catch ((error) => {
-    console.log ('Busca falhou: ' + error)
-    res.status(404).json({
-      mensagem: 'Falhou',
-      livros: []
-    })
-  })
-
-
-})
-
-//DELETE /api/livros/5f91c274c2f25bff67d2f4da
-app.delete('/api/livros/:id', (req, res, next) => {
-  Livro.deleteOne({_id: req.params.id})
-  .then((resultado) => {
-    console.log(resultado);
-    res.status(200).json({mensagem: "Livro removido"});
-  })
-});
-
-app.put ('/api/livros/:idLivro', (req, res, next) => {
-  const livro = new Livro({
-    _id: req.params.idLivro,
-    titulo: req.body.titulo,
-    autor: req.body.autor,
-    numero: req.body.numero
-  });
-  Livro.updateOne(
-    { _id: req.params.idLivro},
-    livro
-  ).then(resultado => {
-    console.log("Atualizou: " + JSON.stringify(resultado))
-    res.status(200).json({mensagem: 'Atualização realizada com sucesso'})
-  })
-})
-
+app.use('/api/livros', livroRoutes);
 
 module.exports = app;
